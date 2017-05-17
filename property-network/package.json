@@ -6,7 +6,7 @@
     "test": "mocha --recursive"
   },
   "author": "ztluo",
-  "license": "Apache-2",
+  "license": "Apache-2.0",
   "devDependencies": {
     "composer-admin": "latest",
     "composer-client": "latest",
@@ -17,5 +17,9 @@
     "istanbul": "latest",
     "mkdirp": "latest",
     "mocha": "latest"
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
   }
 }
