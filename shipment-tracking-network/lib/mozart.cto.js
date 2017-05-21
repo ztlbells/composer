@@ -1,8 +1,8 @@
 'use strict';
 
-function onShipmentDeparture(shipmentDeparture) {
-  console.log('onShipmentDeparture');
-  if (shipmentDeparture.animal.movementStatus !== 'IN_STATION') {
+function onshipmentDeparture(shipmentDeparture) {
+  console.log('onshipmentDeparture');
+  if (shipmentDeparture.shipment.shipmentStatus !== 'IN_STATION') {
     throw new Error('Shipment is already IN_TRANSIT');
   }
 
@@ -31,10 +31,10 @@ function onShipmentDeparture(shipmentDeparture) {
   });
 }
 
-function onShipmentArrival(shipmentArrival) {
+function onshipmentArrival(shipmentArrival) {
   console.log('onAnimalshipmentArrival');
 
-  if (shipmentDeparture.animal.movementStatus !== 'IN_TRANSIT') {
+  if (shipmentDeparture.shipment.shipmentStatus !== 'IN_TRANSIT') {
     throw new Error('Shipment is not IN_TRANSIT');
   }
 
@@ -44,7 +44,7 @@ function onShipmentArrival(shipmentArrival) {
   shipmentArrival.shipment.person_in_charge = shipmentArrival.to.person_in_charge;
 
      // set the new location (facility) of the shipment 
-  shipmentArrival.animal.location = shipmentArrival.arrivalFacility;
+  shipmentArrival.shipment.location = shipmentArrival.arrivalFacility;
 
   return getAssetRegistry('com.biz.Shipment')
   .then(function(ar) {
