@@ -47,7 +47,8 @@ asset Shipment identified by trackingId {
     o String trackingId
     o ShipmentContentsType shipmentContentsType
     o ShipmentStatus shipmentStatus
-    --> Facility location optional
+    o Facility destination
+    --> Facility currentLocation 
     --> PIC person_in_charge
 }
 
@@ -55,26 +56,14 @@ asset Shipment identified by trackingId {
 /**
  * An abstract transaction type for animal movements
  */
-abstract transaction TransitShipment identified by transactionId {
+abstract transaction Transit identified by transactionId {
   o String transactionId
   o String[] logs optional
+    --> Facility from
+    --> Facility to
     --> Shipment shipment
 }
 
-/**
- * A transaction type for a shipment leaving a facility
- */
-transaction ShipmentDeparture extends TransitShipment {
-  --> Facility fromFacility
-}
+transaction ShipmentDepart extends Transit {}
 
-/**
- * A transaction type for an animal arriving at a facility
- */
-transaction ShipmentArrival extends TransitShipment {
-  --> Facility toFacility
-}
-
-transaction SetupDemo identified by transactionId {
-  o String transactionId
-}
+transaction ShipmentArrive extends Transit {}
