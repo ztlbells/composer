@@ -1,7 +1,7 @@
 
 namespace com.biz
 
-enum ShipmentType {
+enum ShipmentContentsType {
   o AMBIENT
   o CHEMICALS
   o ELECTRONIC_COMPONETS
@@ -45,7 +45,7 @@ asset Facility identified by facilityId {
  */
 asset Shipment identified by trackingId {
     o String trackingId
-    o ShipmentType shipmentType
+    o ShipmentContentsType shipmentContentsType
     o ShipmentStatus shipmentStatus
     --> Facility location optional
     --> PIC person_in_charge
