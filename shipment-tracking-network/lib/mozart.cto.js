@@ -1,70 +1,70 @@
 'use strict';
 
-function onShipmentDeparture(movementDeparture) {
+function onShipmentDeparture(shipmentDeparture) {
   console.log('onShipmentDeparture');
-  if (movementDeparture.animal.movementStatus !== 'IN_STATION') {
+  if (shipmentDeparture.animal.movementStatus !== 'IN_STATION') {
     throw new Error('Shipment is already IN_TRANSIT');
   }
 
      // set the status of the shipment
-  movementDeparture.shipment.shipmentStatus = 'IN_TRANSIT';
+  shipmentDeparture.shipment.shipmentStatus = 'IN_TRANSIT';
 
      // save the shipment
   return getAssetRegistry('com.biz.Shipment')
   .then(function(ar) {
-    return ar.update(movementDeparture.shipment);
+    return ar.update(shipmentDeparture.shipment);
   })
   .then(function() {
     // add the shipment to the incoming shipments of the
     // destination facility
-    if (movementDeparture.to.incomingShipments) {
-      movementDeparture.to.incomingShipments.push(movementDeparture.shipment);
+    if (shipmentDeparture.to.incomingShipments) {
+      shipmentDeparture.to.incomingShipments.push(shipmentDeparture.shipment);
     } else {
-      movementDeparture.to.incomingShipments = [movementDeparture.shipment];
+      shipmentDeparture.to.incomingShipments = [shipmentDeparture.shipment];
     }
     
       // save the facility
      return getAssetRegistry('com.biz.Facility')
   })
   .then(function(br) {
-    return br.update(movementDeparture.to);
+    return br.update(shipmentDeparture.to);
   });
 }
 
-function onShipmentArrival(movementArrival) {
-  console.log('onAnimalMovementArrival');
+function onShipmentArrival(shipmentArrival) {
+  console.log('onAnimalshipmentArrival');
 
-  if (movementDeparture.animal.movementStatus !== 'IN_TRANSIT') {
+  if (shipmentDeparture.animal.movementStatus !== 'IN_TRANSIT') {
     throw new Error('Shipment is not IN_TRANSIT');
   }
 
-  movementDeparture.shipment.shipmentStatus = 'IN_FIELD';
+  shipmentDeparture.shipment.shipmentStatus = 'IN_FIELD';
 
      // set the new PIC of the station where the shipment arrives
-  movementArrival.shipment.person_in_charge = movementArrival.to.person_in_charge;
+  shipmentArrival.shipment.person_in_charge = shipmentArrival.to.person_in_charge;
 
      // set the new location (facility) of the shipment 
-  movementArrival.animal.location = movementArrival.arrivalFacility;
+  shipmentArrival.animal.location = shipmentArrival.arrivalFacility;
 
   return getAssetRegistry('com.biz.Shipment')
   .then(function(ar) {
-    return ar.update(movementArrival.shipment);
+    return ar.update(shipmentArrival.shipment);
   })
   .then(function() {
     // remove the shipment from the incoming shipment of the 'to' facility
-    if (!movementArrival.to.incomingShipments) {
+    if (!shipmentArrival.to.incomingShipments) {
       throw new Error('The facility should have incoming shipments.');
     }
 
-    movementArrival.to.incomingShipments = movementArrival.to.incomingShipments
+    shipmentArrival.to.incomingShipments = shipmentArrival.to.incomingShipments
     .filter(function(shipment) {
-      return shipment.trackingId !== movementArrival.shipment.trackingId;
+      return shipment.trackingId !== shipmentArrival.shipment.trackingId;
     });
 
       // save the Facility
     return getAssetRegistry('com.biz.Facility');
   })
   .then(function(br) {
-    return br.update(movementArrival.to);
+    return br.update(shipmentArrival.to);
   });
 }
