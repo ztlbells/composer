@@ -47,7 +47,7 @@ asset Shipment identified by trackingId {
     o String trackingId
     o ShipmentContentsType shipmentContentsType
     o ShipmentStatus shipmentStatus
-    o Facility destination
+    --> Facility destination
     --> Facility currentLocation 
     --> PIC person_in_charge
 }
