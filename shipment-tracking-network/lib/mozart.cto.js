@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * @param {com.biz.ShipmentDepart} shipmentDepart
+ * @transaction
+ */
 
 function onshipmentDeparture(shipmentDepart) {
   //console.log('onshipmentDeparture');
@@ -31,20 +35,24 @@ function onshipmentDeparture(shipmentDepart) {
   });
 }
 
-function onshipmentArrival(shipmentArrive) {
-  //console.log('onAnimalshipmentArrival');
+/**
+ * @param {com.biz.ShipmentArrive} shipmentArrive
+ * @transaction
+ */
+function onshipmentArrive(shipmentArrive) {
+  //console.log('onAnimalshipmentArrive');
 
   if (shipmentArrive.shipment.shipmentStatus !== 'IN_TRANSIT') {
     throw new Error('Shipment is not IN_TRANSIT');
   }
 
-  shipmentArrive.shipment.shipmentStatus = 'IN_FIELD';
+  shipmentArrive.shipment.shipmentStatus = 'IN_STATION';
 
      // set the new PIC of the station where the shipment arrives
   shipmentArrive.shipment.person_in_charge = shipmentArrive.to.person_in_charge;
 
      // set the new location (facility) of the shipment 
-  shipmentArrive.shipment.location = shipmentArrival.to;
+  shipmentArrive.shipment.location = shipmentArrive.to;
 
   return getAssetRegistry('com.biz.Shipment')
   .then(function(ar) {
@@ -58,7 +66,7 @@ function onshipmentArrival(shipmentArrive) {
 
     shipmentArrive.to.incomingShipments = shipmentArrive.to.incomingShipments
     .filter(function(shipment) {
-      return shipment.trackingId !== shipmentArrival.shipment.trackingId;
+      return shipment.trackingId !== shipmentArrive.shipment.trackingId;
     });
 
       // save the Facility
