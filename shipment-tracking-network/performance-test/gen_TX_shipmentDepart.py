@@ -14,25 +14,24 @@ import json, urllib2, httplib, csv, requests
 import sys, time
 
 ########### argv #######################
-datasource = str(sys.argv[1])
+datasource 	= str(sys.argv[1])
 # server addr
-server = str(sys.argv[2])
+server 		= str(sys.argv[2])
 # port
-port = str(sys.argv[3])
+port 		= str(sys.argv[3])
 ########################################
 
 csv_file_path      		= './sample_data/places/' + datasource + '.csv'
-start_time				= time.time()
 
 
 ########### POST Facility #######################
-def POST_shipmentDepart(fromStation, toStation, shipmentId):
+def POST_shipmentDepart(fromStation):
 	url 	= 'http://' + server + ':' + port + '/api/com.biz.ShipmentDepart'
 
 	data 	=  {
 			   "from": fromStation,
-			   "to": toStation,
-			   "shipment": shipmentId,
+			   "to": str(int(fromStation) + 1),
+			   "shipment": fromStation,
  			}
 	r = requests.post(url, data)
 	print r.text
@@ -40,14 +39,21 @@ def POST_shipmentDepart(fromStation, toStation, shipmentId):
 
 
 ########### reading csv part ##################
-reader = csv.reader(open(csv_file_path, 'rU'), dialect='excel')
+# reader = csv.reader(open(csv_file_path, 'rU'), dialect='excel')
 
-counter = 0
-for line in reader :
-    if line[0] != 'id':
-    	POST_Facility(line[0], line[1], line[2])
-    	counter += 1
-    	print counter, "running time:", time.time() - start_time
+output_csv 	= './output_shipmentDepart_' + str(time.localtime()) + '.csv'
+csv_file 	= file (output_csv,"w")
+writer 		= csv.writer(csv_file, quoting = csv.QUOTE_ALL)
 
+counter 	= 3
+start_time	= time.time()
+last_time	= start_time
 
-print "Running time in total:", time.time() - start_time, "Number of Facilities:", counter
+while counter <= 2000:
+	POST_shipmentDepart(str(counter))
+	writer.writerow([str(counter), str(time.time() - last_time)])
+	last_time = time.time()
+	counter += 1
+
+csv_file.close()
+print "Running time in total:", time.time() - start_time, "Number of ShipmentDepart TX:", counter

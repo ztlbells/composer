@@ -32,8 +32,8 @@ def POST_Shipment(trackingId, stationName, person_in_charge):
   			"trackingId": str(trackingId),
 			"shipmentContentsType": gen_Shipment_Contents_Type(),
 			"shipmentStatus": "IN_STATION",
-			"destination": "2600",
-			"currentLocation": str(stationName),
+			"destination": "2601",
+			"currentLocation": str(trackingId),
 			"person_in_charge": str(person_in_charge) 
     }
 	r = requests.post(url, data)
@@ -42,7 +42,7 @@ def POST_Shipment(trackingId, stationName, person_in_charge):
 def gen_Shipment_Contents_Type():
 	ShipmentType = ["AMBIENT", "CHEMICALS", "ELECTRONIC_COMPONETS", "METALS", \
 					"ENGINEERING_SUBASSMEBLIES", "BULK_PRODUCT"]
-	return ShipmentType[random.randint(0,9)]
+	return ShipmentType[random.randint(0,5)]
 
 
 ########### reading csv part ##################
