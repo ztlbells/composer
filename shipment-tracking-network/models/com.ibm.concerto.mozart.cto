@@ -24,8 +24,7 @@ abstract participant User identified by email {
 }
 
 participant PIC extends User {
-    o String address1
-    o String address2
+    o String address
     o String county
     o String postcode
 }
