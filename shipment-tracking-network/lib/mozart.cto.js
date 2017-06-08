@@ -7,7 +7,7 @@
 function onshipmentDeparture(shipmentDepart) {
   //console.log('onshipmentDeparture');
   if (shipmentDepart.shipment.shipmentStatus !== 'IN_STATION') {
-    throw new Error('Shipment is already IN_TRANSIT');
+    throw new Error('Shipment is already IN_TRANSIT/SIGNED_FOR');
   }
 
      // set the status of the shipment
@@ -46,8 +46,12 @@ function onshipmentArrive(shipmentArrive) {
     throw new Error('Shipment is not IN_TRANSIT');
   }
 
-  shipmentArrive.shipment.shipmentStatus = 'IN_STATION';
-
+  if (shipmentArrive.shipment.destination.facilityId === shipmentArrive.to.facilityId) {
+    shipmentArrive.shipment.shipmentStatus = 'SIGNED_FOR';
+  }
+  else{
+    shipmentArrive.shipment.shipmentStatus = 'IN_STATION';
+  }
      // set the new PIC of the station where the shipment arrives
   shipmentArrive.shipment.person_in_charge = shipmentArrive.to.person_in_charge;
 

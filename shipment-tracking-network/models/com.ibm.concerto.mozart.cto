@@ -13,6 +13,7 @@ enum ShipmentContentsType {
 enum ShipmentStatus {
   o IN_STATION
   o IN_TRANSIT
+  o SIGNED_FOR
 }
 // PICKED_UP, SIGNED_FOR
 
